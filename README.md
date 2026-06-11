@@ -2,102 +2,63 @@
 
 [![CI](https://github.com/satyajeetaiml-hue/agentic-ai-azure-week12-capstone/actions/workflows/ci.yml/badge.svg)](https://github.com/satyajeetaiml-hue/agentic-ai-azure-week12-capstone/actions/workflows/ci.yml)
 
-> **Standalone lab** from the *Agentic AI on Azure — Enterprise Master Class* (12 weeks).
-> Each lab is an independent, runnable FastAPI starter. Part of the
-> [course series](https://github.com/satyajeetaiml-hue?tab=repositories&q=agentic-ai-azure).
+> **Standalone lab** from the *Agentic AI on Azure — Enterprise Master Class*.
+> Course hub: [azure-agentic-ai-masterclass](https://github.com/satyajeetaiml-hue/azure-agentic-ai-masterclass).
 
 ---
 
 ## 🎯 Learning goal
-Ship a production-ready, multi-agent application end-to-end on Azure.
+Ship a production-shaped, **multi-agent** application end-to-end.
 
-## 🏢 Enterprise use case — "Capstone Project" (Pick one scenario)
-Choose a scenario — Customer Onboarding Automation (Banking/Telecom), Financial Transaction Compliance (FinTech), Supply-Chain / Sales-Lead Prioritization (Manufacturing/B2B), or Document Generation Workflow (Legal/Insurance) — and build a multi-agent application that brings together everything from the course.
+## 🏢 Capstone scenario — "Customer Onboarding Automation" (Banking/Telecom)
+A staged pipeline of cooperating agents: **Intake → KYC/Compliance → Risk → Provisioning**, each with its
+own status, producing a single onboarding decision. (The other course scenarios — transaction compliance,
+lead prioritization, document generation — follow the same shape.)
 
----
+## ✅ What this repo implements
+A sequential multi-agent pipeline that reuses patterns from across the course:
 
-## 🧪 What you'll build (lab)
-1. Build a multi-agent app (2–4 coordinating agents) with tools via MCP/OpenAPI.
-2. Ground on enterprise data with permission-aware retrieval.
-3. Containerize the FastAPI service and deploy to Container Apps/AKS with CI/CD.
-4. Wire in identity, observability, evaluation, and guardrails.
-5. Write up the architecture and prepare a live demo.
+| Stage | Borrows from | Behavior |
+|-------|--------------|----------|
+| intake | Wk 1–2 | extract name, ID, amount |
+| kyc | Wk 6–7 | screening guardrail (sanction/watchlist/PEP) |
+| risk | Wk 6–7 | flag high-value cases for review |
+| provisioning | Wk 5 tools | create the account when cleared |
 
-> This starter ships with a **runnable mock** of the endpoint so you can run and test
-> immediately, then progressively replace the mock with the real Azure implementation.
-
-## 🏗️ Architect's lens
-- Defend your design — pattern choice, deployment target, cost model, security posture, and day-2 operations.
-
-## 🧰 Tech stack
-Everything from the course: multi-agent orchestration + MCP/OpenAPI, RAG grounding, containerized FastAPI + CI/CD, identity, observability, and evaluation.
-
----
+Decision: `onboarded` / `needs_review` / `rejected`. Runnable offline; `FOUNDRY_PROJECT_ENDPOINT`
+toggles the reported mode.
 
 ## 🚀 Quick start
-
 ```bash
-# 1. Create & activate a virtual environment
-python -m venv .venv
-# Windows (PowerShell):
-.\.venv\Scripts\Activate.ps1
-# macOS/Linux:
-# source .venv/bin/activate
-
-# 2. Install dependencies
+python -m venv .venv && .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-
-# 3. (Optional) copy the env template — runs in MOCK mode without it
-copy .env.example .env        # Windows
-# cp .env.example .env        # macOS/Linux
-
-# 4. Run the API
 uvicorn app.main:app --reload
 ```
-
-Open the interactive docs at **http://127.0.0.1:8000/docs**.
-
-### Try the endpoint
 ```bash
 curl -X POST http://127.0.0.1:8000/api/v1/capstone \
   -H "Content-Type: application/json" \
-  -d '{"scenario": "Customer Onboarding Automation for a retail bank."}'
+  -d '{"applicant_text": "Name: John Doe, ID-AB7788, requesting a $20,000 account."}'
 ```
+Run tests: `pytest -q`
 
-### Run the tests
-```bash
-pytest -q
-```
+## 🧪 Capstone deliverables (extend this)
+- 2–4 coordinating agents with tools via MCP/OpenAPI.
+- Grounding on enterprise data with permission-aware retrieval (Wk 8).
+- Containerized FastAPI deployed to Container Apps/AKS with CI/CD (Wk 9).
+- Identity, observability, evaluation, and guardrails wired in (Wk 10–11).
+- Architecture write-up + live demo.
 
-### Run with Docker
-```bash
-docker build -t agentic-ai-azure-week12-capstone .
-docker run -p 8000:8000 agentic-ai-azure-week12-capstone
-```
+## 🏗️ Architect's lens
+Defend your design — pattern choice, deployment target, cost model, security posture, and day-2 operations.
 
----
+## 🧰 Tech stack
+Everything: multi-agent orchestration + MCP/OpenAPI, RAG grounding, containerized FastAPI + CI/CD,
+identity, observability, evaluation.
 
-## 📁 Project structure
-```
-agentic-ai-azure-week12-capstone/
-├── app/
-│   ├── __init__.py
-│   └── main.py          # FastAPI app + the /api/v1/capstone endpoint
-├── tests/
-│   └── test_smoke.py
-├── requirements.txt
-├── Dockerfile
-├── .env.example
-├── .gitignore
-└── README.md
-```
-
----
-
-## 🗺️ Where this fits
-This repo covers **Week 12 — Capstone: Build, Demo & Review**. The full 12-week path and reference architecture
-live in the master-class companion repo:
-**[azure-agentic-ai-masterclass](https://github.com/satyajeetaiml-hue/azure-agentic-ai-masterclass)**.
+## 🗺️ Series
+Prev: [Week 11](https://github.com/satyajeetaiml-hue/agentic-ai-azure-week11-security) ·
+Course hub: [azure-agentic-ai-masterclass](https://github.com/satyajeetaiml-hue/azure-agentic-ai-masterclass) ·
+[All labs](https://github.com/satyajeetaiml-hue?tab=repositories&q=agentic-ai-azure)
 
 ## 📄 License
 MIT — see [`LICENSE`](LICENSE).
